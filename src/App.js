@@ -2,45 +2,57 @@ import React, { useState } from "react";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import WeekView from "./components/WeekView";
+import EventModal from "./components/EventModal";
 import "./App.css";
 
 const App = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [events, setEvents] = useState({});
+  const [modalData, setModalData] = useState(null);
 
-  const goToPrevWeek = () => {
-    setSelectedDate(new Date(selectedDate.setDate(selectedDate.getDate() - 7)));
+  const handleDateClick = (date) => {
+    setSelectedDate(date);
   };
 
-  const goToNextWeek = () => {
-    setSelectedDate(new Date(selectedDate.setDate(selectedDate.getDate() + 7)));
+  const openEventModal = (day, time) => {
+    setModalData({ day, time, eventText: events[`${day} ${time}:00`] || "" });
   };
 
-  const goToToday = () => {
-    setSelectedDate(new Date());
+  const closeModal = () => {
+    setModalData(null);
   };
 
-  const handleEventClick = (event) => {
-    alert(`Event: ${event.title}`);
+  const addOrEditEvent = (day, time, eventText) => {
+    setEvents({ ...events, [`${day} ${time}:00`]: eventText });
+    closeModal();
+  };
+
+  const deleteEvent = (day, time) => {
+    const updatedEvents = { ...events };
+    delete updatedEvents[`${day} ${time}:00`];
+    setEvents(updatedEvents);
+    closeModal();
   };
 
   return (
     <div className="app">
-      <Header
-        currentWeek={selectedDate.toDateString()}
-        goToPrevWeek={goToPrevWeek}
-        goToNextWeek={goToNextWeek}
-        goToToday={goToToday}
-      />
+      <Header currentWeek={selectedDate.toDateString()} />
       <div className="main-content">
-        <Sidebar setSelectedDate={setSelectedDate} />
+        <Sidebar setSelectedDate={handleDateClick} />
         <WeekView
           selectedDate={selectedDate}
-          onDateSelect={setSelectedDate} // ✅ Fix: Pass the function properly
           events={events}
-          onEventClick={handleEventClick}
+          onTimeSlotClick={openEventModal}
         />
       </div>
+      {modalData && (
+        <EventModal
+          modalData={modalData}
+          addOrEditEvent={addOrEditEvent}
+          deleteEvent={deleteEvent}
+          closeModal={closeModal}
+        />
+      )}
     </div>
   );
 };

@@ -1,8 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./WeekView.css";
 
-const WeekView = ({ selectedDate, onDateSelect, events, onEventClick }) => {
+const WeekView = ({ selectedDate, events, onTimeSlotClick }) => {
   const [currentWeek, setCurrentWeek] = useState(getWeekDates(selectedDate));
+  const [selectedDay, setSelectedDay] = useState(selectedDate);
+
+  useEffect(() => {
+    setCurrentWeek(getWeekDates(selectedDate));
+    setSelectedDay(selectedDate);
+  }, [selectedDate]);
 
   function getWeekDates(date) {
     const startOfWeek = new Date(date);
@@ -14,17 +20,28 @@ const WeekView = ({ selectedDate, onDateSelect, events, onEventClick }) => {
     });
   }
 
+  const handleDayClick = (date) => {
+    setSelectedDay(date);
+  };
+
+  const handleTimeSlotClick = (day, time) => {
+    if (typeof onTimeSlotClick === "function") {
+      onTimeSlotClick(day, time);
+    } else {
+      console.warn("onTimeSlotClick is not a function");
+    }
+  };
+
   const timeSlots = Array.from({ length: 24 }, (_, i) => `${i}:00`);
 
   return (
     <div className="week-view">
-      {/* Header Row: Days + Dates */}
       <div className="week-header">
         {currentWeek.map((date, index) => (
           <div
             key={index}
-            className={`week-day ${date.toDateString() === selectedDate.toDateString() ? "selected" : ""}`}
-            onClick={() => onDateSelect(date)} // ✅ Fix: Clicking a date now works
+            className={`week-day ${date.toDateString() === selectedDay.toDateString() ? "selected" : ""}`}
+            onClick={() => handleDayClick(date)}
           >
             <div className="day-name">{date.toLocaleDateString("en-US", { weekday: "short" }).toUpperCase()}</div>
             <div className="day-date">{date.getDate()}</div>
@@ -32,35 +49,21 @@ const WeekView = ({ selectedDate, onDateSelect, events, onEventClick }) => {
         ))}
       </div>
 
-      {/* Time Slots + Events Grid */}
-      <div className="week-grid">
-        {/* Time Column */}
-        <div className="time-column">
-          {timeSlots.map((time, index) => (
-            <div key={index} className="time-slot">{time}</div>
-          ))}
-        </div>
-
-        {/* Events Grid with Clickable Time Slots */}
+      <div className="event-section">
+        <h3>Events for {selectedDay.toDateString()}</h3>
         <div className="event-container">
-          {timeSlots.map((_, timeIndex) => (
-            <div key={timeIndex} className="week-row">
-              {currentWeek.map((date, dayIndex) => (
-                <div
-                  key={dayIndex}
-                  className="event-cell"
-                  onClick={() => alert(`Clicked on ${date.toDateString()} at ${timeIndex}:00`)}
-                >
-                  {events[`${date.toDateString()} ${timeIndex}:00`] && (
-                    <div
-                      className="event"
-                      onClick={() => onEventClick(events[`${date.toDateString()} ${timeIndex}:00`])}
-                    >
-                      {events[`${date.toDateString()} ${timeIndex}:00`].title}
-                    </div>
-                  )}
+          {timeSlots.map((time, index) => (
+            <div
+              key={index}
+              className="time-slot"
+              onClick={() => handleTimeSlotClick(selectedDay.toDateString(), time)}
+            >
+              <span className="time-label">{time}</span>
+              {events[`${selectedDay.toDateString()} ${time}:00`] && (
+                <div className="event">
+                  {events[`${selectedDay.toDateString()} ${time}:00`]}
                 </div>
-              ))}
+              )}
             </div>
           ))}
         </div>
