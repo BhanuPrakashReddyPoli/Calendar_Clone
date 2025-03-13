@@ -1,0 +1,84 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.header {
+  background-color: #4285F4;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+.header-controls button {
+  background: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  margin: 0 5px;
+}
+
+.main-content {
+  display: flex;
+  flex: 1;
+}
+
+.sidebar {
+  width: 300px;
+  background: white;
+  padding: 20px;
+  border-right: 1px solid #ddd;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.calendar-day {
+  text-align: center;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.week-view {
+  flex: 1;
+  background: white;
+  padding: 20px;
+}
+
+.week-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background: #f1f1f1;
+  padding: 10px;
+}
+
+.time-grid {
+  display: grid;
+  grid-template-columns: 50px repeat(7, 1fr);
+}
+
+.time-label {
+  text-align: center;
+  background: #f9f9f9;
+  border-right: 1px solid #ddd;
+}
+
+.time-slot {
+  min-height: 50px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+}
+
+.event {
+  background: #4285F4;
+  color: white;
+  padding: 5px;
+  text-align: center;
+}
