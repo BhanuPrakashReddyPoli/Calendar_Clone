@@ -1,11 +1,49 @@
 .header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #f1f3f4;
-    padding: 10px;
-    font-size: 24px;
-    font-weight: bold;
-    border-bottom: 1px solid #ddd;
-  }
-  
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 10px 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Left Section: Icon + Title */
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.calendar-icon {
+  margin-right: 10px;
+  color: #4285F4; /* Google Calendar Blue */
+}
+
+.header-title {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+/* Center: Search Bar */
+.search-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.search-bar {
+  width: 250px;
+}
+
+/* Right Section: Icons */
+.header-icons {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Adds spacing between icons */
+}
+
+/* Profile Icon */
+.profile-icon {
+  background-color: #4285F4; /* Google Calendar Blue */
+  color: white;
+  cursor: pointer;
+}

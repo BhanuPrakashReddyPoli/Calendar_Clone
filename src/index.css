@@ -1,20 +1,7 @@
-.week-grid {
-  display: grid;
-  grid-template-columns: 50px repeat(7, 1fr);
-  gap: 2px;
-}
+@import url('https://fonts.googleapis.com/css2?family=Product+Sans&display=swap');
 
-.time-slot, .event-cell {
-  border: 1px solid #ccc;
-  padding: 10px;
-  text-align: center;
-}
-
-.event-cell {
-  cursor: pointer;
-  background-color: #f9f9f9;
-}
-
-.event-cell:hover {
-  background-color: #e0e0e0;
+body {
+    font-family: 'Product Sans', sans-serif;
+    margin: 0;
+    padding: 0;
 }

@@ -12,7 +12,7 @@ const WeekView = ({ selectedDate, events, onTimeSlotClick }) => {
 
   function getWeekDates(date) {
     const startOfWeek = new Date(date);
-    startOfWeek.setDate(date.getDate() - date.getDay()); // Get Sunday of the week
+    startOfWeek.setDate(date.getDate() - date.getDay());
     return Array.from({ length: 7 }, (_, i) => {
       const newDate = new Date(startOfWeek);
       newDate.setDate(startOfWeek.getDate() + i);
@@ -25,10 +25,10 @@ const WeekView = ({ selectedDate, events, onTimeSlotClick }) => {
   };
 
   const handleTimeSlotClick = (day, time) => {
-    if (typeof onTimeSlotClick === "function") {
+    if (onTimeSlotClick) {
       onTimeSlotClick(day, time);
     } else {
-      console.warn("onTimeSlotClick is not a function");
+      console.error("onTimeSlotClick function is not provided.");
     }
   };
 
@@ -52,20 +52,19 @@ const WeekView = ({ selectedDate, events, onTimeSlotClick }) => {
       <div className="event-section">
         <h3>Events for {selectedDay.toDateString()}</h3>
         <div className="event-container">
-          {timeSlots.map((time, index) => (
-            <div
-              key={index}
-              className="time-slot"
-              onClick={() => handleTimeSlotClick(selectedDay.toDateString(), time)}
-            >
-              <span className="time-label">{time}</span>
-              {events[`${selectedDay.toDateString()} ${time}:00`] && (
-                <div className="event">
-                  {events[`${selectedDay.toDateString()} ${time}:00`]}
-                </div>
-              )}
-            </div>
-          ))}
+          {timeSlots.map((time, index) => {
+            const eventKey = `${selectedDay.toDateString()} ${time}`;
+            return (
+              <div
+                key={index}
+                className="time-slot"
+                onClick={() => handleTimeSlotClick(selectedDay.toDateString(), time)}
+              >
+                <span className="time-label">{time}</span>
+                {events[eventKey] && <div className="event">{events[eventKey]}</div>}
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

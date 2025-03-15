@@ -15,7 +15,7 @@ const App = () => {
   };
 
   const openEventModal = (day, time) => {
-    setModalData({ day, time, eventText: events[`${day} ${time}:00`] || "" });
+    setModalData({ day, time, eventText: events[`${day} ${time}`] || "" });
   };
 
   const closeModal = () => {
@@ -23,25 +23,40 @@ const App = () => {
   };
 
   const addOrEditEvent = (day, time, eventText) => {
-    setEvents({ ...events, [`${day} ${time}:00`]: eventText });
+    const formattedDay = new Date(day).toDateString(); // Ensure consistent format
+    const eventKey = `${formattedDay} ${time}`;
+
+    setEvents((prevEvents) => ({
+      ...prevEvents,
+      [eventKey]: eventText,
+    }));
+
+    console.log("Event Saved:", eventKey, eventText); // Debugging log
     closeModal();
   };
 
   const deleteEvent = (day, time) => {
-    const updatedEvents = { ...events };
-    delete updatedEvents[`${day} ${time}:00`];
-    setEvents(updatedEvents);
+    const formattedDay = new Date(day).toDateString();
+    const eventKey = `${formattedDay} ${time}`;
+
+    setEvents((prevEvents) => {
+      const updatedEvents = { ...prevEvents };
+      delete updatedEvents[eventKey];
+      return updatedEvents;
+    });
+
+    console.log("Event Deleted:", eventKey); // Debugging log
     closeModal();
   };
 
   return (
     <div className="app">
-      <Header currentWeek={selectedDate.toDateString()} />
+      <Header currentWeek={selectedDate.toDateString()} addOrEditEvent={addOrEditEvent} />
       <div className="main-content">
         <Sidebar setSelectedDate={handleDateClick} />
         <WeekView
           selectedDate={selectedDate}
-          events={events}
+          events={events} // Pass updated events state
           onTimeSlotClick={openEventModal}
         />
       </div>
